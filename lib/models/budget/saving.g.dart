@@ -1,30 +1,37 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'currency.dart';
+part of 'saving.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CurrencyAdapter extends TypeAdapter<Currency> {
+class SavingTransferAdapter extends TypeAdapter<SavingTransfer> {
   @override
-  final int typeId = 4;
+  final int typeId = 5;
 
   @override
-  Currency read(BinaryReader reader) {
+  SavingTransfer read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Currency(fields[0] as int);
+    return SavingTransfer()
+      ..name = fields[0] as String
+      ..amount = fields[1] as Currency
+      ..time = fields[2] as DateTime;
   }
 
   @override
-  void write(BinaryWriter writer, Currency obj) {
+  void write(BinaryWriter writer, SavingTransfer obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.amount);
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.amount)
+      ..writeByte(2)
+      ..write(obj.time);
   }
 
   @override
@@ -33,7 +40,7 @@ class CurrencyAdapter extends TypeAdapter<Currency> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CurrencyAdapter &&
+      other is SavingTransferAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

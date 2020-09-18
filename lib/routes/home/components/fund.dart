@@ -1,5 +1,4 @@
-import 'package:budgeteer/models/budget/budget.dart';
-import 'package:budgeteer/utils/fund.dart';
+import 'package:budgeteer/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -12,7 +11,7 @@ class Fund extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: Budget.getBox().listenable(),
       builder: (BuildContext context, Box<Budget> budgetBox, Widget widget) {
-        var res = FundUtils.calculateFund(budgetBox.values);
+        var res = Budget.calculateFund(budgetBox.values);
         return RichText(
           textAlign: TextAlign.center,
           text: TextSpan(

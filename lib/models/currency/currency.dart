@@ -1,22 +1,34 @@
 import 'package:budgeteer/models/config.dart';
 import 'package:hive/hive.dart';
 
-part "currency.p.dart";
+part "currency.g.dart";
 
 @HiveType(typeId: HiveTypeId.Currency)
 class Currency {
   @HiveField(0)
-  final int amount;
+  final int value;
 
-  const Currency(this.amount);
+  const Currency(this.value);
+  static const Currency zero = const Currency(0);
+  factory Currency.fromString(String s) {
+    try {
+      return Currency(int.parse(s));
+    } catch (e) {
+      return Currency.zero;
+    }
+  }
 
   String representation({bool extended = false}) {
-    if (extended) {
-      return "$amount₫";
+    if (extended || value < 1000) {
+      return "$value ₫";
     } else {
-      double newAmount = amount / 1000.0;
+      double newAmount = value / 1000.0;
       return "${newAmount.toStringAsFixed(1)}k ₫";
     }
+  }
+
+  String toString() {
+    return value.toString();
   }
 
   static void registerAdapters() {
@@ -25,41 +37,45 @@ class Currency {
 
   @override
   bool operator ==(Object other) {
-    return other is Currency && other.amount == amount;
+    return other is Currency && other.value == value;
   }
 
   @override
-  int get hashCode => amount.hashCode;
+  int get hashCode => value.hashCode;
 
   Currency operator +(Currency other) {
-    return Currency(amount + other.amount);
+    return Currency(value + other.value);
   }
 
   Currency operator -(Currency other) {
-    return Currency(amount - other.amount);
+    return Currency(value - other.value);
+  }
+
+  Currency operator -() {
+    return Currency(-value);
   }
 
   Currency operator *(double x) {
-    return Currency((amount * x).round());
+    return Currency((value * x).round());
   }
 
   Currency operator /(double x) {
-    return Currency((amount / x).round());
+    return Currency((value / x).round());
   }
 
   bool operator >(Currency other) {
-    return amount > other.amount;
+    return value > other.value;
   }
 
   bool operator <(Currency other) {
-    return amount < other.amount;
+    return value < other.value;
   }
 
   bool operator >=(Currency other) {
-    return amount >= other.amount;
+    return value >= other.value;
   }
 
   bool operator <=(Currency other) {
-    return amount <= other.amount;
+    return value <= other.value;
   }
 }

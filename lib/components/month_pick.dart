@@ -1,8 +1,8 @@
-import 'package:budgeteer/utils/date_time.dart';
+import 'package:budgeteer/models/meta/meta.dart';
+import 'package:budgeteer/models/month_year.dart';
 import 'package:flutter/material.dart';
 
 class MonthPick extends StatelessWidget {
-  static const int MIN_YEAR = 2020;
   final void Function(MonthYear newMonth) handleMonthSelected;
 
   final MonthYear currentMonth;
@@ -17,7 +17,8 @@ class MonthPick extends StatelessWidget {
       : super(key: key);
 
   bool _isMinMonth() {
-    return currentMonth <= MonthYear.firstOfYear(MIN_YEAR);
+    Metadata meta = Metadata();
+    return currentMonth <= MonthYear.fromDateTime(meta.installationDate);
   }
 
   bool _isMaxMonth() {
