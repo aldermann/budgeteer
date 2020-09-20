@@ -3,7 +3,7 @@ import 'package:budgeteer/models/month_year.dart';
 import 'package:budgeteer/routes/home/components/speed_dial.dart';
 import 'package:flutter/material.dart';
 
-import 'components/budget/budget_list.dart';
+import 'components/budget_list.dart';
 import 'components/fund.dart';
 import 'route.dart';
 

@@ -5,13 +5,14 @@ import "package:flutter/material.dart";
 import "package:hive/hive.dart";
 import "package:hive_flutter/hive_flutter.dart";
 
-import 'routes/home/home.dart';
+import 'models/hive_link/hive_link.dart';
 import 'models/currency/currency.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
   Budget.registerAdapters();
   Currency.registerAdapters();
+  HiveLink.registerAdapters();
   await Metadata.init();
   await Budget.openBox();
   runApp(MyApp());

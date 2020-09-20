@@ -6,23 +6,23 @@ part of 'hive_link.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class HiveLinkAdapter extends TypeAdapter<HiveLink> {
+class HiveLinkAdapter<T extends HiveObject> extends TypeAdapter<HiveLink<T>> {
   @override
-  final int typeId = 0;
+  final int typeId = 8;
 
   @override
-  HiveLink read(BinaryReader reader) {
+  HiveLink<T> read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return HiveLink()
+    return HiveLink<T>()
       .._boxName = fields[0] as String
       .._key = fields[1] as dynamic;
   }
 
   @override
-  void write(BinaryWriter writer, HiveLink obj) {
+  void write(BinaryWriter writer, HiveLink<T> obj) {
     writer
       ..writeByte(2)
       ..writeByte(0)

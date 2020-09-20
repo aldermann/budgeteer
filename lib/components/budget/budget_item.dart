@@ -1,7 +1,8 @@
-import 'package:budgeteer/models/budget/budget.dart';
+import 'package:budgeteer/models/models.dart';
 import 'package:budgeteer/utils/date_time.dart';
 import 'package:flutter/material.dart';
 
+import 'expense_item.dart';
 import 'income_item.dart';
 import 'loan_item.dart';
 
@@ -11,28 +12,38 @@ typedef PopupMenuButton PopupMenuBuilder<T extends Budget>(
   T b,
 );
 
-abstract class BudgetItem<T extends Budget> extends StatelessWidget {
+class BudgetItem<T extends Budget> extends StatelessWidget {
   final T budget;
   final CallbackWithBudget<T> onEdit;
   final PopupMenuBuilder<T> popupMenuBuilder;
+  final bool editable;
 
   BudgetItem({
     Key key,
     this.budget,
-    @required this.onEdit,
-    @required this.popupMenuBuilder,
+    this.onEdit,
+    this.popupMenuBuilder,
+    this.editable: true,
   }) : super(key: key);
 
-  static BudgetItem buildItem({Key key, Budget budget}) {
+  static BudgetItem buildItem({Key key, Budget budget, bool editable: true}) {
     if (budget is Income) {
-      return IncomeItem(key: key, income: budget);
+      return IncomeItem(key: key, income: budget, editable: editable);
     } else if (budget is Loan) {
-      return LoanItem(key: key, loan: budget);
+      return LoanItem(key: key, loan: budget, editable: editable);
+    } else if (budget is Expense) {
+      return ExpenseItem(key: key, expense: budget, editable: editable);
+    } else if (budget is LoanPayment) {
+      return LoanPaymentItem(key: key, loanPayment: budget, editable: editable);
     }
-    return null;
+    return BudgetItem(key: key, budget: budget, editable: editable);
   }
 
-  editBudget(BuildContext context) => () => onEdit(context, budget);
+  editBudget(BuildContext context) => () {
+        if (onEdit != null) {
+          onEdit(context, budget);
+        }
+      };
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +66,11 @@ abstract class BudgetItem<T extends Budget> extends StatelessWidget {
           ],
         ),
       ),
-      trailing: popupMenuBuilder?.call(context, budget),
+      trailing: editable && popupMenuBuilder != null
+          ? popupMenuBuilder(context, budget)
+          : null,
       isThreeLine: true,
-      onLongPress: editBudget(context),
+      onLongPress: editable ? editBudget(context) : null,
     );
   }
 }

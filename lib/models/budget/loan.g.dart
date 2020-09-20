@@ -17,7 +17,7 @@ class LoanAdapter extends TypeAdapter<Loan> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Loan()
-      .._paymentLink = fields[3] as HiveLink<LoanPayment>
+      .._paymentLink = fields[3]?.cast<LoanPayment>()
       ..name = fields[0] as String
       ..amount = fields[1] as Currency
       ..time = fields[2] as DateTime;
@@ -59,7 +59,7 @@ class LoanPaymentAdapter extends TypeAdapter<LoanPayment> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return LoanPayment()
-      .._loanLink = fields[3] as HiveLink<Loan>
+      .._loanLink = fields[3]?.cast<Loan>()
       ..name = fields[0] as String
       ..amount = fields[1] as Currency
       ..time = fields[2] as DateTime;

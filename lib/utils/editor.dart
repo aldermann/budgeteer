@@ -1,6 +1,7 @@
 enum EditMode {
   Update,
-  Create
+  Create,
+  View,
 }
 
 extension EditModeExtension on EditMode {
@@ -10,6 +11,8 @@ extension EditModeExtension on EditMode {
         return "Update";
       case EditMode.Create:
         return "Create";
+      case EditMode.View:
+        return "View";
     }
     return "";
   }

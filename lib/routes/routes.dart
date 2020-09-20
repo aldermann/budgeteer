@@ -12,4 +12,5 @@ Map<String, WidgetBuilder> routes = {
   HomeRoute.routeName: HomeRoute.routeBuilder,
   AddIncomeRoute.routeName: AddIncomeRoute.routeBuilder,
   LoanRoute.routeName: LoanRoute.routeBuilder,
+  LoanPaymentRoute.routeName: LoanPaymentRoute.routeBuilder
 };

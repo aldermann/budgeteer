@@ -63,6 +63,8 @@ class AddIncomeRouteState extends State<AddIncomeRoute> {
         Box<Budget> budgetBox = Budget.getBox();
         budgetBox.add(income);
         break;
+      default:
+        break;
     }
     Navigator.popUntil(context, ModalRoute.withName(HomeRoute.routeName));
   }

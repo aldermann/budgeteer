@@ -19,7 +19,7 @@ class Currency {
   }
 
   String representation({bool extended = false}) {
-    if (extended || value < 1000) {
+    if (extended || value.abs() < 1000) {
       return "$value ₫";
     } else {
       double newAmount = value / 1000.0;

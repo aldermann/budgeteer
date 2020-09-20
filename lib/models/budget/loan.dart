@@ -1,9 +1,8 @@
-import 'package:budgeteer/models/currency/currency.dart';
-import 'package:budgeteer/utils/hive_link/hive_link.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 import '../config.dart';
+import '../models.dart';
 import 'budget.dart';
 
 part "loan.g.dart";
@@ -27,11 +26,21 @@ class Loan extends Budget {
   }
 
   void linkPayment(LoanPayment payment) {
+    _paymentLink = HiveLink<LoanPayment>();
+    payment._loanLink = HiveLink<Loan>();
     _paymentLink.item = payment;
     payment._loanLink.item = this;
+    payment.save();
+    save();
   }
 
-  LoanPayment get payment => _paymentLink.item;
+  LoanPayment get payment => _paymentLink?.item;
+
+  @override
+  Future<void> delete() {
+    _paymentLink?.item?.delete();
+    return super.delete();
+  }
 }
 
 @HiveType(typeId: HiveTypeId.LoanPayment)
@@ -46,7 +55,7 @@ class LoanPayment extends Budget {
   }) : super(name: name, amount: amount, time: time);
 
   @override
-  IconData get icon => throw UnimplementedError();
+  IconData get icon => Icons.account_balance;
 
-  Loan get loan => _loanLink.item;
+  Loan get loan => _loanLink?.item;
 }

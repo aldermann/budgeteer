@@ -9,6 +9,7 @@ class ControlledTextField extends StatefulWidget {
   final List<TextInputFormatter> inputFormatters;
   final TextInputAction textInputAction;
   final ValueChanged<String> onSubmitted;
+  final bool enabled;
 
   const ControlledTextField({
     Key key,
@@ -18,7 +19,8 @@ class ControlledTextField extends StatefulWidget {
     this.inputFormatters,
     this.onChanged,
     this.textInputAction,
-    this.onSubmitted
+    this.onSubmitted,
+    this.enabled,
   }) : super(key: key);
 
   @override
@@ -63,6 +65,7 @@ class _ControlledTextFieldState extends State<ControlledTextField> {
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,
       onSubmitted: widget.onSubmitted,
+      enabled: widget.enabled,
     );
   }
 }

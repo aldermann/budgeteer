@@ -1,10 +1,10 @@
+import 'package:budgeteer/components/budget/budget_item.dart';
 import 'package:budgeteer/models/budget/budget.dart';
 import 'package:budgeteer/models/month_year.dart';
 import "package:flutter/material.dart";
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'budget_item.dart';
 
 class BudgetList extends StatelessWidget {
   final MonthYear currentMonth;

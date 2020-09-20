@@ -42,13 +42,16 @@ class CurrencyFormField extends FormField<Currency> {
     InputDecoration decoration,
     TextInputAction textInputAction,
     ValueChanged<Currency> onSubmitted,
+    bool enabled = true,
   }) : super(
             onSaved: onSaved,
+            enabled: enabled,
             validator: validator,
             autovalidate: autovalidate,
             initialValue: initialValue,
             builder: (FormFieldState<Currency> state) {
               return ControlledTextField(
+                enabled: enabled,
                 value: state.value.toString(),
                 decoration: decoration.copyWith(
                   errorText: state.errorText,

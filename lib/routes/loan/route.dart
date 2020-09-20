@@ -2,9 +2,10 @@ import 'package:budgeteer/models/budget/loan.dart';
 import 'package:flutter/material.dart';
 
 import 'loan.dart';
+export 'loan_payment.dart';
 
 class LoanRoute extends StatefulWidget {
-  static const String routeName = "/add_income/loan";
+  static const String routeName = "/loan";
   final Loan loan;
 
   const LoanRoute({Key key, this.loan}) : super(key: key);
@@ -18,5 +19,6 @@ class LoanRoute extends StatefulWidget {
   }
 
   @override
-  LoanIncomeRouteState createState() => LoanIncomeRouteState();
+  LoanRouteState createState() => LoanRouteState();
 }
+

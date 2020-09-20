@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:budgeteer/models/currency/currency.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';

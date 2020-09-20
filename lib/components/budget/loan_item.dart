@@ -10,6 +10,18 @@ enum _LoanAction {
 }
 
 class LoanItem extends BudgetItem<Loan> {
+  LoanItem({
+    Key key,
+    Loan loan,
+    bool editable,
+  }) : super(
+          key: key,
+          budget: loan,
+          onEdit: _handleEdit,
+          popupMenuBuilder: _buildMenuButton,
+          editable: editable,
+        );
+
   static void _handleEdit(BuildContext context, Loan loan) {
     Navigator.pushNamed(context, LoanRoute.routeName, arguments: loan);
   }
@@ -45,12 +57,47 @@ class LoanItem extends BudgetItem<Loan> {
       },
     );
   }
+}
 
-  LoanItem({Key key, Loan loan})
-      : super(
+class LoanPaymentItem extends BudgetItem<LoanPayment> {
+  LoanPaymentItem({
+    Key key,
+    LoanPayment loanPayment,
+    bool editable,
+  }) : super(
           key: key,
-          budget: loan,
+          budget: loanPayment,
           onEdit: _handleEdit,
           popupMenuBuilder: _buildMenuButton,
+          editable: editable,
         );
+
+  static void _handleEdit(BuildContext context, LoanPayment loanPayment) {
+    Navigator.pushNamed(context, LoanPaymentRoute.routeName,
+        arguments: loanPayment);
+  }
+
+  static void _handleDelete(BuildContext context, LoanPayment loanPayment) {
+    loanPayment.delete();
+  }
+
+  static PopupMenuButton _buildMenuButton(
+      BuildContext context, LoanPayment loanPayment) {
+    return PopupMenuButton<_LoanAction>(
+      icon: Icon(Icons.more_vert),
+      itemBuilder: (BuildContext innerContext) {
+        return <PopupMenuEntry<_LoanAction>>[
+          PopupMenuItem<_LoanAction>(
+            value: _LoanAction.Delete,
+            child: Text("Delete"),
+          ),
+        ];
+      },
+      onSelected: (_LoanAction action) {
+        if (action == _LoanAction.Delete) {
+          _handleDelete(context, loanPayment);
+        }
+      },
+    );
+  }
 }
