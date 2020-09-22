@@ -1,8 +1,8 @@
-import 'package:budgeteer/models/currency/currency.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 import '../config.dart';
+import '../models.dart';
 import 'budget.dart';
 
 part "expense.g.dart";
@@ -14,7 +14,7 @@ class ExpenseType extends BudgetType {
       const ExpenseType("Necessity", Icons.fastfood);
 
   static const ExpenseType SelfImprovement =
-      const ExpenseType("SelfImprovement", Icons.trending_up);
+      const ExpenseType("Self Improvement", Icons.trending_up);
 
   static const ExpenseType Entertainment =
       const ExpenseType("Entertainment", Icons.games);
@@ -71,8 +71,12 @@ class Expense extends Budget {
   @HiveField(3)
   ExpenseType type;
 
-  Expense({String name, Currency amount, DateTime time, this.type})
-      : super(name: name, amount: amount, time: time);
+  Expense({
+    String name = "",
+    Currency amount = Currency.zero,
+    DateTime time,
+    this.type = ExpenseType.Necessity,
+  }) : super(name: name, amount: amount?.negative, time: time);
 
   @override
   IconData get icon => type.icon;

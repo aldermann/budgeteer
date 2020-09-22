@@ -5,12 +5,11 @@ import 'package:flutter/material.dart';
 import 'expense_item.dart';
 import 'income_item.dart';
 import 'loan_item.dart';
+import 'saving_item.dart';
 
 typedef void CallbackWithBudget<T extends Budget>(BuildContext context, T b);
-typedef PopupMenuButton PopupMenuBuilder<T extends Budget>(
-  BuildContext context,
-  T b,
-);
+typedef PopupMenuButton PopupMenuBuilder<T extends Budget>(BuildContext context,
+    T b,);
 
 class BudgetItem<T extends Budget> extends StatelessWidget {
   final T budget;
@@ -35,11 +34,14 @@ class BudgetItem<T extends Budget> extends StatelessWidget {
       return ExpenseItem(key: key, expense: budget, editable: editable);
     } else if (budget is LoanPayment) {
       return LoanPaymentItem(key: key, loanPayment: budget, editable: editable);
+    } else if (budget is SavingTransfer) {
+      return SavingItem(key: key, saving: budget, editable: editable);
     }
     return BudgetItem(key: key, budget: budget, editable: editable);
   }
 
-  editBudget(BuildContext context) => () {
+  editBudget(BuildContext context) =>
+          () {
         if (onEdit != null) {
           onEdit(context, budget);
         }

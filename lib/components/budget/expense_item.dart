@@ -1,4 +1,5 @@
 import 'package:budgeteer/models/models.dart';
+import 'package:budgeteer/routes/routes.dart';
 import 'package:flutter/material.dart';
 
 import 'budget_item.dart';
@@ -19,11 +20,11 @@ class ExpenseItem extends BudgetItem<Expense> {
         );
 
   static void _handleEdit(BuildContext context, Expense expense) {
-    // Navigator.pushNamed(context, AddExpenseRoute.routeName, arguments: expense);
+    Navigator.pushNamed(context, AddExpenseRoute.routeName, arguments: expense);
   }
 
   static void _handleDelete(BuildContext context, Expense expense) {
-    expense.delete();
+    expense.deleteWithConfirmation(context);
   }
 
   static PopupMenuButton _buildMenuButton(

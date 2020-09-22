@@ -38,4 +38,29 @@ abstract class Dialogs {
     );
     return completer.future;
   }
+
+  static void showAlert({
+    @required BuildContext context,
+    @required String title,
+    @required String content,
+    String confirmString = "OK",
+  }) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [
+            FlatButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(confirmString),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

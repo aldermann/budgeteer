@@ -11,11 +11,17 @@ part "saving.g.dart";
 
 @HiveType(typeId: HiveTypeId.SavingTransfer)
 class SavingTransfer extends Budget {
-  SavingTransfer({String name, Currency amount, DateTime time})
-      : super(name: name, amount: amount, time: time);
+  SavingTransfer({
+    String name = "",
+    Currency amount = Currency.zero,
+    DateTime time,
+  }) : super(name: name, amount: amount, time: time);
 
   @override
   Color get color {
+    if (amount.ge(0)) {
+      return Colors.blue.shade600;
+    }
     return Colors.yellow.shade600;
   }
 

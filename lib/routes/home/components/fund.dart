@@ -11,7 +11,7 @@ class Fund extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: Budget.getBox().listenable(),
       builder: (BuildContext context, Box<Budget> budgetBox, Widget widget) {
-        var res = Budget.calculateFund(budgetBox.values);
+        final res = Budget.calculateFund();
         return RichText(
           textAlign: TextAlign.center,
           text: TextSpan(

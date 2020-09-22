@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'budget_item.dart';
 
-enum _LoanAction {
-  Edit,
-  Delete,
-}
+enum _LoanAction { Edit, Delete, MakePayment }
 
 class LoanItem extends BudgetItem<Loan> {
   LoanItem({
@@ -26,8 +23,12 @@ class LoanItem extends BudgetItem<Loan> {
     Navigator.pushNamed(context, LoanRoute.routeName, arguments: loan);
   }
 
-  static void _handleDelete(BuildContext context, Loan loan) {
-    loan.delete();
+  static void _handleMakePayment(BuildContext context, Loan loan) {
+    Navigator.pushNamed(context, LoanPaymentRoute.routeName, arguments: loan);
+  }
+
+  static Future<void> _handleDelete(BuildContext context, Loan loan) async {
+    loan.deleteWithConfirmation(context);
   }
 
   static PopupMenuButton _buildMenuButton(BuildContext context, Loan loan) {
@@ -43,6 +44,11 @@ class LoanItem extends BudgetItem<Loan> {
             value: _LoanAction.Delete,
             child: Text("Delete"),
           ),
+          if (loan.payment == null)
+            PopupMenuItem<_LoanAction>(
+              value: _LoanAction.MakePayment,
+              child: Text("Make Payment"),
+            ),
         ];
       },
       onSelected: (_LoanAction action) {
@@ -52,6 +58,9 @@ class LoanItem extends BudgetItem<Loan> {
             break;
           case _LoanAction.Delete:
             _handleDelete(context, loan);
+            break;
+          case _LoanAction.MakePayment:
+            _handleMakePayment(context, loan);
             break;
         }
       },

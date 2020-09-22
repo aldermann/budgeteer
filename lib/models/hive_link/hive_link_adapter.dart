@@ -1,10 +1,4 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
-
-part of 'hive_link.dart';
-
-// **************************************************************************
-// TypeAdapterGenerator
-// **************************************************************************
+part of "hive_link.dart";
 
 class HiveLinkAdapter<T extends HiveObject> extends TypeAdapter<HiveLink<T>> {
   @override

@@ -1,5 +1,4 @@
-import 'package:budgeteer/models/meta/meta.dart';
-import 'package:budgeteer/models/month_year.dart';
+import 'package:budgeteer/models/models.dart';
 import 'package:flutter/material.dart';
 
 class MonthPick extends StatelessWidget {

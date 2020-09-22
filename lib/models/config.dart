@@ -8,4 +8,6 @@ class HiveTypeId {
   static const int Loan = 6;
   static const int LoanPayment = 7;
   static const int HiveLink = 8;
+  static const int WishItem = 9;
+  static const int SavingType = 10;
 }

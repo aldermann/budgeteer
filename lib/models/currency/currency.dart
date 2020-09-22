@@ -3,13 +3,23 @@ import 'package:hive/hive.dart';
 
 part "currency.g.dart";
 
+abstract class Multiplier {
+  static const int G = 1000000000;
+  static const int M = 1000000;
+  static const int K = 1000;
+}
+
 @HiveType(typeId: HiveTypeId.Currency)
 class Currency {
   @HiveField(0)
   final int value;
 
   const Currency(this.value);
+
+  const Currency.withMultiplier(int v, int mult) : this(v * mult);
+
   static const Currency zero = const Currency(0);
+
   factory Currency.fromString(String s) {
     try {
       return Currency(int.parse(s));
@@ -33,6 +43,14 @@ class Currency {
 
   static void registerAdapters() {
     Hive.registerAdapter<Currency>(CurrencyAdapter());
+  }
+
+  Currency get negative {
+    return Currency(-value.abs());
+  }
+
+  Currency get positive {
+    return Currency(value.abs());
   }
 
   @override
@@ -77,5 +95,21 @@ class Currency {
 
   bool operator <=(Currency other) {
     return value <= other.value;
+  }
+
+  bool gt(int amount) {
+    return value > amount;
+  }
+
+  bool lt(int amount) {
+    return value < amount;
+  }
+
+  bool ge(int amount) {
+    return value >= amount;
+  }
+
+  bool le(int amount) {
+    return value <= amount;
   }
 }

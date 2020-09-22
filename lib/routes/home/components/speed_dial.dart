@@ -1,7 +1,5 @@
-import 'package:budgeteer/models/budget/budget.dart';
-import 'package:budgeteer/models/currency/currency.dart';
-import 'package:budgeteer/routes/income/route.dart';
-import 'package:budgeteer/routes/loan/route.dart';
+import 'package:budgeteer/models/models.dart';
+import 'package:budgeteer/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hive/hive.dart';
@@ -15,17 +13,6 @@ class CustomSpeedDial extends StatelessWidget {
     box.clear();
   }
 
-  void handleRemoveMoney() {
-    DateTime t = DateTime.now();
-    var cash = Expense(
-      name: "drug",
-      type: ExpenseType.SelfImprovement,
-      amount: Currency(100000),
-      time: t,
-    );
-    box.add(cash);
-  }
-
   @override
   Widget build(BuildContext context) {
     return SpeedDial(
@@ -37,7 +24,7 @@ class CustomSpeedDial extends StatelessWidget {
       children: [
         SpeedDialChild(
           child: Icon(Icons.clear),
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.grey,
           label: 'Clear fund',
           onTap: handleClearFund,
           labelBackgroundColor: Colors.black,
@@ -59,8 +46,15 @@ class CustomSpeedDial extends StatelessWidget {
         SpeedDialChild(
           child: Icon(Icons.remove),
           backgroundColor: Colors.red,
-          label: 'Remove fund',
-          onTap: handleRemoveMoney,
+          label: 'Add expense',
+          onTap: () => Navigator.pushNamed(context, AddExpenseRoute.routeName),
+          labelBackgroundColor: Colors.black,
+        ),
+        SpeedDialChild(
+          child: Icon(Icons.monetization_on),
+          backgroundColor: Colors.blue,
+          label: 'Manage saving',
+          onTap: () => Navigator.pushNamed(context, SavingRoute.routeName),
           labelBackgroundColor: Colors.black,
         ),
       ],

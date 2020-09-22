@@ -9,6 +9,8 @@ class LoanPaymentRoute extends StatelessWidget {
   final Loan loan;
   final LoanPayment loanPayment;
 
+  final Currency _totalFund;
+
   static Widget routeBuilder(BuildContext context) {
     final args = ModalRoute.of(context).settings.arguments;
     if (args != null) {
@@ -24,13 +26,22 @@ class LoanPaymentRoute extends StatelessWidget {
     return null;
   }
 
-  LoanPaymentRoute({Key key, this.loan, this.loanPayment}) : super(key: key) {
+  LoanPaymentRoute({Key key, this.loan, this.loanPayment})
+      : _totalFund = Budget.calculateFund().item1,
+        super(key: key) {
     if (loan == null && loanPayment == null) {
       throw AssertionError("You need either 'loan' or 'loanPayment' specified");
     }
   }
 
   _handleMakePayment(BuildContext context) => () async {
+        if (loan.amount.lt(0) && -loan.amount > _totalFund) {
+          Dialogs.showAlert(
+            context: context,
+            title: "Error",
+            content: "You cannot pay more than what you are having",
+          );
+        }
         bool confirmation = await Dialogs.showConfirmationDialog(
           context: context,
           title: "Confirm",
@@ -45,13 +56,8 @@ class LoanPaymentRoute extends StatelessWidget {
       };
 
   _handleDeletePayment(BuildContext context) => () async {
-        bool confirmation = await Dialogs.showConfirmationDialog(
-          context: context,
-          title: "Delete",
-          content: "Delete this payment?",
-        );
-        if (confirmation) {
-          loanPayment.delete();
+        bool deleted = await loanPayment.deleteWithConfirmation(context);
+        if (deleted) {
           Navigator.popUntil(context, ModalRoute.withName(HomeRoute.routeName));
         }
       };

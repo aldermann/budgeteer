@@ -1,4 +1,5 @@
-import 'package:budgeteer/models/currency/currency.dart';
+import 'package:budgeteer/components/dialog.dart';
+import 'package:budgeteer/models/models.dart';
 import 'package:flutter/material.dart';
 import "package:hive/hive.dart";
 import 'package:tuple/tuple.dart';
@@ -14,6 +15,7 @@ export "saving.dart";
 
 import "loan.dart";
 export "loan.dart";
+
 const String _BUDGET_BOX_NAME = "BUDGET";
 
 abstract class Budget extends HiveObject {
@@ -60,13 +62,31 @@ abstract class Budget extends HiveObject {
     }
   }
 
-  static Tuple2<Currency, Currency> calculateFund(Iterable<Budget> budgets) {
+  static Tuple2<Currency, Currency> calculateFund() {
+    final box = getBox();
     Currency totalFund = Currency.zero;
     Currency totalSaving = Currency.zero;
-    for (Budget budget in budgets) {
-      totalFund += budget.amount;
+    for (Budget budget in box.values) {
+      if (budget is SavingTransfer) {
+        totalSaving += budget.amount;
+        totalFund -= budget.amount;
+      } else {
+        totalFund += budget.amount;
+      }
     }
     return Tuple2(totalFund, totalSaving);
+  }
+
+  Future<bool> deleteWithConfirmation(BuildContext context) async {
+    bool confirmation = await Dialogs.showConfirmationDialog(
+      context: context,
+      title: "Deletion",
+      content: "Are you sure you want to delete this item?",
+    );
+    if (confirmation) {
+      await delete();
+    }
+    return confirmation;
   }
 }
 

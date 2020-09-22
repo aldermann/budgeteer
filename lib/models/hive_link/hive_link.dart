@@ -1,11 +1,12 @@
 import 'package:budgeteer/models/budget/budget.dart';
 import 'package:hive/hive.dart';
+
 // ignore: implementation_imports
 import 'package:hive/src/hive_impl.dart';
 
 import '../config.dart';
 
-part 'hive_link.g.dart';
+part "hive_link_adapter.dart";
 
 @HiveType(typeId: HiveTypeId.HiveLink)
 class HiveLink<T extends HiveObject> {

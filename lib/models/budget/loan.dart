@@ -1,3 +1,4 @@
+import 'package:budgeteer/components/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -40,6 +41,23 @@ class Loan extends Budget {
   Future<void> delete() {
     _paymentLink?.item?.delete();
     return super.delete();
+  }
+
+  @override
+  Future<bool> deleteWithConfirmation(BuildContext context) async {
+    String message = "Are you sure you want to delete this loan?";
+    if (payment != null) {
+      message += "\nThis action will also delete it's payment";
+    }
+    bool confirmation = await Dialogs.showConfirmationDialog(
+      context: context,
+      title: "Delete loan",
+      content: message,
+    );
+    if (confirmation) {
+      await delete();
+    }
+    return confirmation;
   }
 }
 

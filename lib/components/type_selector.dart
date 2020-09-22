@@ -46,7 +46,6 @@ class TypeSelector<T extends dynamic> extends StatelessWidget {
       borderRadius: BorderRadius.all(Radius.circular(10)),
       children: values
           .map((T v) => Container(
-                width: 50,
                 margin: EdgeInsets.all(10),
                 child: Column(
                   children: [
@@ -73,6 +72,7 @@ class TypeSelectorFormField<T extends dynamic> extends FormField<T> {
     FormFieldSetter<T> onSaved,
     T initialValue,
     ValueChanged<T> onSubmitted,
+    ValueChanged<T> onChanged,
     Map<T, IconData> iconMap,
     Map<T, String> nameMap,
   }) : super(
@@ -80,7 +80,10 @@ class TypeSelectorFormField<T extends dynamic> extends FormField<T> {
           initialValue: initialValue ?? values.first,
           builder: (FormFieldState<T> state) {
             return TypeSelector<T>(
-              onChanged: state.didChange,
+              onChanged: (T t) {
+                state.didChange(t);
+                onChanged?.call(t);
+              },
               currentValue: state.value,
               values: values,
               iconMap: iconMap,

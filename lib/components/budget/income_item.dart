@@ -23,7 +23,7 @@ class IncomeItem extends BudgetItem<Income> {
   }
 
   static void _handleDelete(BuildContext context, Income income) {
-    income.delete();
+    income.deleteWithConfirmation(context);
   }
 
   static PopupMenuButton _buildMenuButton(BuildContext context, Income income) {

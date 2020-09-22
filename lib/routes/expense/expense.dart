@@ -1,6 +1,5 @@
 import 'package:budgeteer/components/currency_input.dart';
 import 'package:budgeteer/components/ensure_focus.dart';
-import 'package:budgeteer/components/type_selector.dart';
 import 'package:budgeteer/models/models.dart';
 import 'package:budgeteer/routes/routes.dart';
 import 'package:budgeteer/utils/editor.dart';
@@ -9,45 +8,49 @@ import 'package:hive/hive.dart';
 
 import 'route.dart';
 
-class AddIncomeRouteState extends State<AddIncomeRoute> {
+class AddExpenseRouteState extends State<AddExpenseRoute> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode _amountFocusNode = FocusNode();
   final FocusNode _nameFocusNode = FocusNode();
-  final FocusNode _typeFocusNode = FocusNode();
-
-  Income income;
+  final FocusNode _finishFocusNode = FocusNode();
+  Currency _totalFund;
+  Expense expense;
   EditMode _editMode;
   String nameError;
   String savingError;
 
   void initState() {
     super.initState();
-    if (widget.income != null) {
-      income = widget.income;
+    _totalFund = Budget.calculateFund().item1;
+    if (widget.expense != null) {
+      expense = widget.expense;
       _editMode = EditMode.Update;
     } else {
-      income = Income();
+      expense = Expense(type: ExpenseType.Necessity);
       _editMode = EditMode.Create;
     }
   }
 
   String _validateName(String name) {
     if (name == null || name.isEmpty) {
-      return "Input something";
+      return "Input something.";
+    }
+    return null;
+  }
+
+  String _validateAmount(Currency amount) {
+    if (amount.positive > _totalFund) {
+      return "You are spending more than what you have.";
     }
     return null;
   }
 
   void _handleSaveName(String name) {
-    income.name = name ?? "";
+    expense.name = name ?? "";
   }
 
   void _handleSaveCurrency(Currency amount) {
-    income.amount = amount ?? Currency.zero;
-  }
-
-  void _handleSaveType(IncomeType type) {
-    income.type = type ?? IncomeType.Salary;
+    expense.amount = amount ?? Currency.zero;
   }
 
   void _handleSubmit() {
@@ -57,11 +60,11 @@ class AddIncomeRouteState extends State<AddIncomeRoute> {
     _formKey.currentState.save();
     switch (_editMode) {
       case EditMode.Update:
-        income.save();
+        expense.save();
         break;
       case EditMode.Create:
         Box<Budget> budgetBox = Budget.getBox();
-        budgetBox.add(income);
+        budgetBox.add(expense);
         break;
       default:
         break;
@@ -70,7 +73,7 @@ class AddIncomeRouteState extends State<AddIncomeRoute> {
   }
 
   Future<void> _handleDelete() async {
-    bool deleted = await income.deleteWithConfirmation(context);
+    bool deleted = await expense.deleteWithConfirmation(context);
     if (deleted) {
       Navigator.popUntil(context, ModalRoute.withName(HomeRoute.routeName));
     }
@@ -80,7 +83,7 @@ class AddIncomeRouteState extends State<AddIncomeRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Self made income"),
+        title: Text("Self made expense"),
       ),
       body: Container(
         padding: EdgeInsets.all(10),
@@ -99,7 +102,9 @@ class AddIncomeRouteState extends State<AddIncomeRoute> {
                   textInputAction: TextInputAction.next,
                   onSubmitted: (Currency amount) =>
                       _nameFocusNode.requestFocus(),
-                  initialValue: income.amount,
+                  initialValue: expense.amount,
+                  validator: _validateAmount,
+                  sign: CurrencyInputSign.Negative,
                 ),
                 focusNode: _amountFocusNode,
               ),
@@ -108,34 +113,26 @@ class AddIncomeRouteState extends State<AddIncomeRoute> {
                   decoration: InputDecoration(
                     labelText: "Name *",
                     icon: Icon(Icons.message),
-                    helperText: "A name for this income.",
+                    helperText: "A name for this expense.",
                     errorText: nameError,
                   ),
                   onSaved: _handleSaveName,
                   textInputAction: TextInputAction.next,
                   validator: _validateName,
                   onFieldSubmitted: (String input) =>
-                      _typeFocusNode.requestFocus(),
-                  initialValue: income.name,
+                      _finishFocusNode.requestFocus(),
+                  initialValue: expense.name,
                 ),
                 focusNode: _nameFocusNode,
               ),
-              EnsureVisibleWhenFocused(
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  child: Center(
-                    child: TypeSelectorFormField<IncomeType>(
-                      onSaved: _handleSaveType,
-                      values: IncomeType.values,
-                      initialValue: income.type,
-                    ),
-                  ),
-                ),
-                focusNode: _typeFocusNode,
+              ListTile(
+                title: Text(expense.type.name),
+                trailing: Icon(expense.type.icon),
               ),
               RaisedButton(
                 child: Text(_editMode.name),
                 onPressed: _handleSubmit,
+                focusNode: _finishFocusNode,
               ),
               if (_editMode == EditMode.Update)
                 RaisedButton(

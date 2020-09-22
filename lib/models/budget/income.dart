@@ -67,7 +67,7 @@ class Income extends Budget {
     Currency amount = Currency.zero,
     DateTime time,
     this.type = IncomeType.Salary,
-  }) : super(name: name, amount: amount, time: time);
+  }) : super(name: name, amount: amount?.positive, time: time);
 
   @override
   IconData get icon => type.icon;
