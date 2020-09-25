@@ -4,8 +4,14 @@ import 'package:budgeteer/models/models.dart';
 import 'package:budgeteer/routes/routes.dart';
 import 'package:flutter/material.dart';
 
-class LoanPaymentRoute extends StatelessWidget {
-  static const String routeName = "/loan/payment";
+import '../config.dart';
+
+class AddLoanPaymentRoute extends StatelessWidget {
+  static const RouteConfig config = RouteConfig(
+    "/loan/payment",
+    "Loan payment",
+    Icons.home,
+  );
   final Loan loan;
   final LoanPayment loanPayment;
 
@@ -15,18 +21,18 @@ class LoanPaymentRoute extends StatelessWidget {
     final args = ModalRoute.of(context).settings.arguments;
     if (args != null) {
       if (args is Loan) {
-        return LoanPaymentRoute(loan: args);
+        return AddLoanPaymentRoute(loan: args);
       }
       if (args is LoanPayment) {
-        return LoanPaymentRoute(loanPayment: args);
+        return AddLoanPaymentRoute(loanPayment: args);
       }
       throw AssertionError(
-          "Argument for $routeName must be a Loan or LoanPayment object");
+          "Argument for ${config.routePath} must be a Loan or LoanPayment object");
     }
     return null;
   }
 
-  LoanPaymentRoute({Key key, this.loan, this.loanPayment})
+  AddLoanPaymentRoute({Key key, this.loan, this.loanPayment})
       : _totalFund = Budget.calculateFund().item1,
         super(key: key) {
     if (loan == null && loanPayment == null) {
@@ -51,14 +57,16 @@ class LoanPaymentRoute extends StatelessWidget {
           LoanPayment payment = loan.makePayment();
           Budget.getBox().add(payment);
           loan.linkPayment(payment);
-          Navigator.popUntil(context, ModalRoute.withName(HomeRoute.routeName));
+          Navigator.popUntil(
+              context, ModalRoute.withName(HomeRoute.config.routePath));
         }
       };
 
   _handleDeletePayment(BuildContext context) => () async {
         bool deleted = await loanPayment.deleteWithConfirmation(context);
         if (deleted) {
-          Navigator.popUntil(context, ModalRoute.withName(HomeRoute.routeName));
+          Navigator.popUntil(
+              context, ModalRoute.withName(HomeRoute.config.routePath));
         }
       };
 
@@ -70,7 +78,7 @@ class LoanPaymentRoute extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Payment"),
+        title: Text(AddLoanPaymentRoute.config.routeName),
       ),
       body: Container(
         child: Center(

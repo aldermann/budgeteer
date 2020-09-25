@@ -1,24 +1,29 @@
 import 'package:budgeteer/models/budget/loan.dart';
 import 'package:flutter/material.dart';
 
-import 'loan.dart';
-export 'loan_payment.dart';
+import '../config.dart';
+import 'add_loan.dart';
+export 'add_loan_payment.dart';
 
-class LoanRoute extends StatefulWidget {
-  static const String routeName = "/loan";
+class AddLoanRoute extends StatefulWidget {
+  static const RouteConfig config = RouteConfig(
+    "/loan/add",
+    "Add Loan",
+    Icons.attach_money,
+  );
   final Loan loan;
 
-  const LoanRoute({Key key, this.loan}) : super(key: key);
+  const AddLoanRoute({Key key, this.loan}) : super(key: key);
 
   static Widget routeBuilder(BuildContext context) {
     final args = ModalRoute.of(context).settings.arguments;
     if (args != null && !(args is Loan)) {
-      throw AssertionError("Argument for $routeName must be an Loan object");
+      throw AssertionError(
+          "Argument for ${config.routePath} must be an Loan object");
     }
-    return LoanRoute(loan: args);
+    return AddLoanRoute(loan: args);
   }
 
   @override
-  LoanRouteState createState() => LoanRouteState();
+  AddLoanRouteState createState() => AddLoanRouteState();
 }
-

@@ -1,3 +1,4 @@
+import 'package:budgeteer/components/drawer.dart';
 import 'package:budgeteer/components/month_pick.dart';
 import 'package:budgeteer/models/models.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ class HomeRouteState extends State<HomeRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: CustomSpeedDial(),
+      drawer: DrawerWidget.defaultDrawer(HomeRoute.config.routePath),
       body: CustomScrollView(
         physics: ClampingScrollPhysics(),
         slivers: <Widget>[

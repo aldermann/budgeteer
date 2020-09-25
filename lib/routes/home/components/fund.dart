@@ -15,13 +15,13 @@ class Fund extends StatelessWidget {
         return RichText(
           textAlign: TextAlign.center,
           text: TextSpan(
-              text: "Your current fund is: ${res.item1.representation()}",
+              text: "Current fund:",
               style: TextStyle(fontSize: 20),
               children: <TextSpan>[
                 TextSpan(
-                  text: '\nYour saving is: ${res.item2.representation()}',
+                  text: '\n${res.item1.representation(extended: true)}',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 16,
                   ),
                 ),
               ]),

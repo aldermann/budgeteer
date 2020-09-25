@@ -6,24 +6,24 @@ part of 'saving.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class SavingTransferAdapter extends TypeAdapter<SavingTransfer> {
+class SavingTransferAdapter extends TypeAdapter<Saving> {
   @override
   final int typeId = 5;
 
   @override
-  SavingTransfer read(BinaryReader reader) {
+  Saving read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return SavingTransfer()
+    return Saving()
       ..name = fields[0] as String
       ..amount = fields[1] as Currency
       ..time = fields[2] as DateTime;
   }
 
   @override
-  void write(BinaryWriter writer, SavingTransfer obj) {
+  void write(BinaryWriter writer, Saving obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)

@@ -1,15 +1,22 @@
 import 'package:budgeteer/models/models.dart';
 import 'package:flutter/material.dart';
 
-import 'expense.dart';
+import '../config.dart';
+import 'add_expense.dart';
 
 class AddExpenseRoute extends StatefulWidget {
-  static const String routeName = "/add_expense";
+  static const RouteConfig config = RouteConfig(
+    "/expense/add",
+    "Add Expense",
+    Icons.fastfood,
+  );
 
   static Widget routeBuilder(BuildContext context) {
     final args = ModalRoute.of(context).settings.arguments;
     if (args != null && !(args is Expense)) {
-      throw AssertionError("Argument for $routeName must be an Expense object");
+      throw AssertionError(
+        "Argument for ${config.routePath} must be an Expense object",
+      );
     }
     return AddExpenseRoute(expense: args);
   }

@@ -20,11 +20,11 @@ class LoanItem extends BudgetItem<Loan> {
         );
 
   static void _handleEdit(BuildContext context, Loan loan) {
-    Navigator.pushNamed(context, LoanRoute.routeName, arguments: loan);
+    Navigator.pushNamed(context, AddLoanRoute.config.routePath, arguments: loan);
   }
 
   static void _handleMakePayment(BuildContext context, Loan loan) {
-    Navigator.pushNamed(context, LoanPaymentRoute.routeName, arguments: loan);
+    Navigator.pushNamed(context, AddLoanPaymentRoute.config.routePath, arguments: loan);
   }
 
   static Future<void> _handleDelete(BuildContext context, Loan loan) async {
@@ -82,7 +82,7 @@ class LoanPaymentItem extends BudgetItem<LoanPayment> {
         );
 
   static void _handleEdit(BuildContext context, LoanPayment loanPayment) {
-    Navigator.pushNamed(context, LoanPaymentRoute.routeName,
+    Navigator.pushNamed(context, AddLoanPaymentRoute.config.routePath,
         arguments: loanPayment);
   }
 

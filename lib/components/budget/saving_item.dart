@@ -9,10 +9,10 @@ enum _SavingAction {
   Delete,
 }
 
-class SavingItem extends BudgetItem<SavingTransfer> {
+class SavingItem extends BudgetItem<Saving> {
   SavingItem({
     Key key,
-    SavingTransfer saving,
+    Saving saving,
     bool editable,
   }) : super(
           key: key,
@@ -22,15 +22,15 @@ class SavingItem extends BudgetItem<SavingTransfer> {
           editable: editable,
         );
 
-  static void _handleEdit(BuildContext context, SavingTransfer saving) {
-    Navigator.pushNamed(context, SavingRoute.routeName, arguments: saving);
+  static void _handleEdit(BuildContext context, Saving saving) {
+    Navigator.pushNamed(context, AddSavingRoute.config.routePath, arguments: saving);
   }
 
-  static void _handleDelete(BuildContext context, SavingTransfer saving) {
+  static void _handleDelete(BuildContext context, Saving saving) {
     saving.deleteWithConfirmation(context);
   }
 
-  static PopupMenuButton _buildMenuButton(BuildContext context, SavingTransfer saving) {
+  static PopupMenuButton _buildMenuButton(BuildContext context, Saving saving) {
     return PopupMenuButton<_SavingAction>(
       icon: Icon(Icons.more_vert),
       itemBuilder: (BuildContext innerContext) {

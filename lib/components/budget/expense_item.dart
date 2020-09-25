@@ -20,7 +20,7 @@ class ExpenseItem extends BudgetItem<Expense> {
         );
 
   static void _handleEdit(BuildContext context, Expense expense) {
-    Navigator.pushNamed(context, AddExpenseRoute.routeName, arguments: expense);
+    Navigator.pushNamed(context, AddExpenseRoute.config.routePath, arguments: expense);
   }
 
   static void _handleDelete(BuildContext context, Expense expense) {

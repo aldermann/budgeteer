@@ -19,11 +19,15 @@ class IncomeItem extends BudgetItem<Income> {
             editable: editable);
 
   static void _handleEdit(BuildContext context, Income income) {
-    Navigator.pushNamed(context, AddIncomeRoute.routeName, arguments: income);
+    Navigator.pushNamed(context, AddIncomeRoute.config.routePath, arguments: income);
   }
 
   static void _handleDelete(BuildContext context, Income income) {
     income.deleteWithConfirmation(context);
+  }
+
+  static void _handleMakeSaving(BuildContext context, Income income) {
+    Navigator.pushNamed(context, AddSavingRoute.config.routePath, arguments: income);
   }
 
   static PopupMenuButton _buildMenuButton(BuildContext context, Income income) {
@@ -54,6 +58,7 @@ class IncomeItem extends BudgetItem<Income> {
             _handleDelete(context, income);
             break;
           case _IncomeAction.MakeSaving:
+            _handleMakeSaving(context, income);
             break;
         }
       },

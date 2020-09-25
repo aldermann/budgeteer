@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       routes: routes,
-      initialRoute: "/home",
+      initialRoute: HomeRoute.config.routePath,
     );
   }
 }

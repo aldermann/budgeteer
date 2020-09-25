@@ -10,8 +10,8 @@ import 'budget.dart';
 part "saving.g.dart";
 
 @HiveType(typeId: HiveTypeId.SavingTransfer)
-class SavingTransfer extends Budget {
-  SavingTransfer({
+class Saving extends Budget {
+  Saving({
     String name = "",
     Currency amount = Currency.zero,
     DateTime time,

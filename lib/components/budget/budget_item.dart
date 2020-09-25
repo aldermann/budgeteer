@@ -34,7 +34,7 @@ class BudgetItem<T extends Budget> extends StatelessWidget {
       return ExpenseItem(key: key, expense: budget, editable: editable);
     } else if (budget is LoanPayment) {
       return LoanPaymentItem(key: key, loanPayment: budget, editable: editable);
-    } else if (budget is SavingTransfer) {
+    } else if (budget is Saving) {
       return SavingItem(key: key, saving: budget, editable: editable);
     }
     return BudgetItem(key: key, budget: budget, editable: editable);

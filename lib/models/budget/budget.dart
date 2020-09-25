@@ -43,7 +43,7 @@ abstract class Budget extends HiveObject {
     Hive.registerAdapter<ExpenseType>(ExpenseTypeAdapter());
     Hive.registerAdapter<Income>(IncomeAdapter());
     Hive.registerAdapter<IncomeType>(IncomeTypeAdapter());
-    Hive.registerAdapter<SavingTransfer>(SavingTransferAdapter());
+    Hive.registerAdapter<Saving>(SavingTransferAdapter());
     Hive.registerAdapter<Loan>(LoanAdapter());
     Hive.registerAdapter<LoanPayment>(LoanPaymentAdapter());
   }
@@ -67,7 +67,7 @@ abstract class Budget extends HiveObject {
     Currency totalFund = Currency.zero;
     Currency totalSaving = Currency.zero;
     for (Budget budget in box.values) {
-      if (budget is SavingTransfer) {
+      if (budget is Saving) {
         totalSaving += budget.amount;
         totalFund -= budget.amount;
       } else {

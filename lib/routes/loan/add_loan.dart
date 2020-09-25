@@ -1,3 +1,4 @@
+import 'package:budgeteer/components/budget/loan_item.dart';
 import 'package:budgeteer/components/currency_input.dart';
 import 'package:budgeteer/components/ensure_focus.dart';
 import 'package:budgeteer/components/type_selector.dart';
@@ -9,71 +10,70 @@ import 'package:hive/hive.dart';
 
 import 'route.dart';
 
-class _SavingType extends BudgetType {
-  const _SavingType(String name, IconData icon) : super(name: name, icon: icon);
+enum _LoanType { Give, Get }
 
-  static const _SavingType In = const _SavingType("In", Icons.arrow_upward);
+const Map<_LoanType, IconData> _LoanIconMap = {
+  _LoanType.Give: Icons.arrow_upward,
+  _LoanType.Get: Icons.arrow_downward,
+};
 
-  static const _SavingType Out = const _SavingType("Out", Icons.arrow_downward);
+const Map<_LoanType, String> _LoanNameMap = {
+  _LoanType.Give: "Give",
+  _LoanType.Get: "Get",
+};
 
-  static List<_SavingType> values = [In, Out];
-}
-
-class SavingRouteState extends State<SavingRoute> {
+class AddLoanRouteState extends State<AddLoanRoute> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   FocusNode _amountFieldFocusNode = FocusNode();
   FocusNode _nameFieldFocusNode = FocusNode();
-  Currency _totalFund, _totalSaving;
-
-  SavingTransfer saving;
+  Currency _totalFund;
+  Loan loan;
+  _LoanType _loanType;
   EditMode _editMode;
-
-  _SavingType _savingType;
 
   void initState() {
     super.initState();
-    if (widget.saving != null) {
-      saving = widget.saving;
-      _savingType = saving.amount.ge(0) ? _SavingType.In : _SavingType.Out;
-      saving.amount = saving.amount.positive;
-      _editMode = EditMode.Update;
+    if (widget.loan != null) {
+      loan = widget.loan;
+      _loanType = loan.amount.gt(0) ? _LoanType.Get : _LoanType.Give;
+      loan.amount = loan.amount.positive;
+      if (loan.payment != null) {
+        _editMode = EditMode.View;
+      } else {
+        _editMode = EditMode.Update;
+      }
     } else {
-      saving = SavingTransfer();
-      _savingType = _SavingType.In;
+      loan = Loan();
+      _loanType = _LoanType.Give;
       _editMode = EditMode.Create;
     }
-
-    var res = Budget.calculateFund();
-    _totalFund = res.item1;
-    _totalSaving = res.item2;
+    _totalFund = Budget.calculateFund().item1;
   }
 
   void _handleSaveAmount(Currency amount) {
-    saving.amount = amount;
+    loan.amount = amount;
   }
 
   String _validateAmount(Currency amount) {
-    if (_savingType == _SavingType.In && amount.positive > _totalFund) {
-      return "You cannot save more than what you are having";
-    }
-    if (_savingType == _SavingType.Out && amount.positive > _totalSaving) {
-      return "You cannot take out more than what you are saving";
+    if (_loanType == _LoanType.Give && amount.positive > _totalFund) {
+      return "You cannot give more than what you are having";
     }
     return null;
   }
 
   void _handleSaveName(String name) {
-    saving.name = name;
+    loan.name = name;
   }
 
-  void _handleSaveType(_SavingType type) {
-    _savingType = type;
+  String _validateName(String name) {
+    if (name == null || name.isEmpty) {
+      return "Please input something";
+    }
+    return null;
   }
 
-  void _handleChangeType(_SavingType type) {
-    setState(() {
-      _savingType = type;
-    });
+  void _handleSaveType(_LoanType type) {
+    _loanType = type;
   }
 
   void _handleSubmit() {
@@ -82,26 +82,39 @@ class SavingRouteState extends State<SavingRoute> {
     }
     _formKey.currentState.save();
     if (_editMode == EditMode.Update) {
-      saving.save();
+      loan.save();
     } else {
       Box<Budget> budgetBox = Budget.getBox();
-      budgetBox.add(saving);
+      budgetBox.add(loan);
     }
-    Navigator.popUntil(context, ModalRoute.withName(HomeRoute.routeName));
+    Navigator.popUntil(
+        context, ModalRoute.withName(HomeRoute.config.routePath));
   }
 
   Future<void> _handleDelete() async {
-    bool deleted = await saving.deleteWithConfirmation(context);
+    bool deleted = await loan.deleteWithConfirmation(context);
     if (deleted) {
-      Navigator.popUntil(context, ModalRoute.withName(HomeRoute.routeName));
+      Navigator.popUntil(
+          context, ModalRoute.withName(HomeRoute.config.routePath));
     }
+  }
+
+  void _handleChangeType(_LoanType type) {
+    setState(() {
+      _loanType = type;
+    });
+  }
+
+  void _handleMakePayment() {
+    Navigator.pushNamed(context, AddLoanPaymentRoute.config.routePath,
+        arguments: loan);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Saving"),
+        title: Text(AddLoanRoute.config.routeName),
       ),
       body: Container(
         margin: EdgeInsets.all(16.0),
@@ -112,11 +125,13 @@ class SavingRouteState extends State<SavingRoute> {
               if (_editMode == EditMode.Create)
                 Center(
                   child: TypeSelectorFormField(
-                    values: _SavingType.values,
-                    initialValue: _SavingType.In,
+                    values: _LoanType.values,
+                    initialValue: _loanType,
+                    iconMap: _LoanIconMap,
+                    nameMap: _LoanNameMap,
                     onSaved: _handleSaveType,
                     onChanged: _handleChangeType,
-                    onSubmitted: (_SavingType type) {
+                    onSubmitted: (_LoanType type) {
                       _amountFieldFocusNode.requestFocus();
                     },
                   ),
@@ -124,16 +139,16 @@ class SavingRouteState extends State<SavingRoute> {
               EnsureVisibleWhenFocused(
                 child: CurrencyFormField(
                   enabled: _editMode != EditMode.View,
-                  sign: _savingType == _SavingType.In
-                      ? CurrencyInputSign.Positive
-                      : CurrencyInputSign.Negative,
-                  initialValue: saving.amount,
+                  sign: _loanType == _LoanType.Give
+                      ? CurrencyInputSign.Negative
+                      : CurrencyInputSign.Positive,
+                  initialValue: loan.amount,
                   onSaved: _handleSaveAmount,
                   decoration: InputDecoration(
-                    helperText: _savingType == _SavingType.In
-                        ? "How much are you saving?"
-                        : "How much are you taking out?",
-                    labelText: "Amount",
+                    helperText: _loanType == _LoanType.Give
+                        ? "How much are you lending?"
+                        : "How much are you borrowing?",
+                    labelText: "Amount *",
                   ),
                   textInputAction: TextInputAction.next,
                   onSubmitted: (Currency currency) {
@@ -146,17 +161,25 @@ class SavingRouteState extends State<SavingRoute> {
               EnsureVisibleWhenFocused(
                 child: TextFormField(
                   enabled: _editMode != EditMode.View,
-                  initialValue: saving.name,
+                  initialValue: loan.name,
                   onSaved: _handleSaveName,
                   focusNode: _nameFieldFocusNode,
                   decoration: InputDecoration(
-                    labelText: "Name",
-                    helperText: "Give this saving a name",
+                    labelText: "Name *",
+                    helperText: _loanType == _LoanType.Give
+                        ? "Who are you lending?"
+                        : "Who are you borrowing from?",
                     icon: Icon(Icons.message),
                   ),
+                  validator: _validateName,
                 ),
                 focusNode: _nameFieldFocusNode,
               ),
+              if (loan.payment != null)
+                LoanPaymentItem(
+                  loanPayment: loan.payment,
+                  editable: false,
+                ),
               if (_editMode != EditMode.View)
                 RaisedButton(
                   child: Text(_editMode.name),
@@ -167,6 +190,11 @@ class SavingRouteState extends State<SavingRoute> {
                   child: Text("Delete"),
                   onPressed: _handleDelete,
                 ),
+              if (_editMode == EditMode.Update)
+                RaisedButton(
+                  child: Text("Make Payment"),
+                  onPressed: _handleMakePayment,
+                )
             ],
           ),
         ),

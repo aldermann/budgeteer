@@ -1,5 +1,6 @@
 import 'package:budgeteer/models/config.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 
 part "currency.g.dart";
 
@@ -29,12 +30,16 @@ class Currency {
   }
 
   String representation({bool extended = false}) {
+    NumberFormat currencyFormat;
     if (extended || value.abs() < 1000) {
-      return "$value ₫";
+      currencyFormat = NumberFormat.simpleCurrency(
+        locale: "vi_VN",
+        decimalDigits: 0,
+      );
     } else {
-      double newAmount = value / 1000.0;
-      return "${newAmount.toStringAsFixed(1)}k ₫";
+      currencyFormat = NumberFormat.compactSimpleCurrency(locale: "vi_VN");
     }
+    return currencyFormat.format(value);
   }
 
   String toString() {
