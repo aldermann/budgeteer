@@ -1,6 +1,6 @@
-import 'package:budgeteer/components/currency_input.dart';
-import 'package:budgeteer/components/ensure_focus.dart';
-import 'package:budgeteer/components/type_selector.dart';
+import 'package:budgeteer/components/input/currency_input.dart';
+import 'package:budgeteer/components/input/ensure_focus.dart';
+import 'package:budgeteer/components/input/type_selector.dart';
 import 'package:budgeteer/models/models.dart';
 import 'package:budgeteer/routes/routes.dart';
 import 'package:budgeteer/utils/editor.dart';

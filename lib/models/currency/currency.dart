@@ -46,7 +46,7 @@ class Currency {
     return value.toString();
   }
 
-  static void registerAdapters() {
+  static void register() {
     Hive.registerAdapter<Currency>(CurrencyAdapter());
   }
 

@@ -1,10 +1,10 @@
 import 'package:budgeteer/components/drawer.dart';
-import 'package:budgeteer/components/month_pick.dart';
+import 'package:budgeteer/components/fund.dart';
+import 'package:budgeteer/components/input/month_pick.dart';
 import 'package:budgeteer/models/models.dart';
 import 'package:flutter/material.dart';
 
 import 'components/budget_list.dart';
-import 'components/fund.dart';
 import 'components/speed_dial.dart';
 import 'route.dart';
 
@@ -22,6 +22,28 @@ class HomeRouteState extends State<HomeRoute> {
     setState(() {
       currentMonth = month;
     });
+  }
+
+  Widget fundBuilder(
+    BuildContext context,
+    Currency totalBudget,
+    Currency totalSaving,
+  ) {
+    return RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        text: "Current fund:",
+        style: TextStyle(fontSize: 20),
+        children: <TextSpan>[
+          TextSpan(
+            text: '\n${totalBudget.representation(extended: true)}',
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -44,7 +66,7 @@ class HomeRouteState extends State<HomeRoute> {
                 StretchMode.fadeTitle,
               ],
               centerTitle: true,
-              title: Fund(),
+              title: FundListener(builder: fundBuilder),
               background: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

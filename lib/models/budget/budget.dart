@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:budgeteer/components/dialog.dart';
 import 'package:budgeteer/models/models.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +40,7 @@ abstract class Budget extends HiveObject {
     return Hive.box<Budget>(_BUDGET_BOX_NAME);
   }
 
-  static void registerAdapters() {
+  static void register() {
     Hive.registerAdapter<Expense>(ExpenseAdapter());
     Hive.registerAdapter<ExpenseType>(ExpenseTypeAdapter());
     Hive.registerAdapter<Income>(IncomeAdapter());
@@ -48,8 +50,33 @@ abstract class Budget extends HiveObject {
     Hive.registerAdapter<LoanPayment>(LoanPaymentAdapter());
   }
 
+  static bool _boxModified = true;
+  static Currency _totalFund = Currency.zero;
+  static Currency _totalSaving = Currency.zero;
+
   static Future<void> openBox() async {
-    await Hive.openBox<Budget>(_BUDGET_BOX_NAME);
+    final box = await Hive.openBox<Budget>(_BUDGET_BOX_NAME);
+    box.watch().listen(
+          (BoxEvent event) => scheduleMicrotask(() => _boxModified = true),
+        );
+  }
+
+  static Tuple2<Currency, Currency> calculateFund() {
+    if (_boxModified) {
+      final box = getBox();
+      _totalFund = Currency.zero;
+      _totalSaving = Currency.zero;
+      for (Budget budget in box.values) {
+        if (budget is Saving) {
+          _totalSaving += budget.amount;
+          _totalFund -= budget.amount;
+        } else {
+          _totalFund += budget.amount;
+        }
+      }
+      _boxModified = false;
+    }
+    return Tuple2(_totalFund, _totalSaving);
   }
 
   IconData get icon;
@@ -60,21 +87,6 @@ abstract class Budget extends HiveObject {
     } else {
       return Colors.red;
     }
-  }
-
-  static Tuple2<Currency, Currency> calculateFund() {
-    final box = getBox();
-    Currency totalFund = Currency.zero;
-    Currency totalSaving = Currency.zero;
-    for (Budget budget in box.values) {
-      if (budget is Saving) {
-        totalSaving += budget.amount;
-        totalFund -= budget.amount;
-      } else {
-        totalFund += budget.amount;
-      }
-    }
-    return Tuple2(totalFund, totalSaving);
   }
 
   Future<bool> deleteWithConfirmation(BuildContext context) async {

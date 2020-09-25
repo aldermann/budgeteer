@@ -6,9 +6,9 @@ import "package:hive_flutter/hive_flutter.dart";
 
 Future<void> main() async {
   await Hive.initFlutter();
-  Budget.registerAdapters();
-  Currency.registerAdapters();
-  HiveLink.registerAdapters();
+  Budget.register();
+  Currency.register();
+  HiveLink.register();
   await Metadata.init();
   await Budget.openBox();
   runApp(MyApp());
@@ -32,6 +32,9 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         brightness: Brightness.dark,
         primarySwatch: Colors.red,
+        primaryColor: Colors.red,
+        primaryColorDark: Colors.red.shade800,
+        primaryColorLight: Colors.red.shade300,
         appBarTheme: AppBarTheme(color: Colors.red.shade700),
         // This makes the visual density adapt to the platform that you run
         // the app on. For desktop platforms, the controls will be smaller and

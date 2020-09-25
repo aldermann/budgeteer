@@ -37,7 +37,7 @@ class HiveLink<T extends HiveObject> {
       .._boxName = _boxName;
   }
 
-  static void registerAdapters() {
+  static void register() {
     Hive.registerAdapter<HiveLink<Budget>>(HiveLinkAdapter<Budget>());
   }
 }
