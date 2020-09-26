@@ -4,19 +4,25 @@ import 'package:budgeteer/routes/config.dart';
 import 'package:budgeteer/routes/routes.dart';
 import "package:flutter/material.dart";
 
-class DrawerWidget extends StatelessWidget {
+class RouteDrawer extends StatelessWidget {
   final List<RouteConfig> routes;
   final String currentRoutePath;
 
-  DrawerWidget({
+  RouteDrawer({
     Key key,
     this.routes,
     this.currentRoutePath,
   }) : super(key: key);
 
-  DrawerWidget.defaultDrawer(final String currentRoutePath)
+  RouteDrawer.defaultDrawer(final String currentRoutePath)
       : this(
-          routes: <RouteConfig>[HomeRoute.config],
+          routes: <RouteConfig>[
+            HomeRoute.config,
+            IncomeRoute.config,
+            ExpenseRoute.config,
+            LoanRoute.config,
+            SavingRoute.config,
+          ],
           currentRoutePath: currentRoutePath,
         );
 
@@ -69,13 +75,29 @@ class DrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<ListTile> routesListTile = routes
-        .map((RouteConfig r) => ListTile(
-              title: Text(r.routeName),
-              leading: Icon(r.icon),
-              selected: r.routePath == currentRoutePath,
-            ))
-        .toList();
+    ThemeData theme = Theme.of(context);
+    List<ListTile> routesListTile = routes.map(
+      (RouteConfig r) {
+        final bool selected = r.routePath == currentRoutePath;
+        return ListTile(
+            title: Text(r.routeName),
+            leading: Icon(r.icon),
+            selected: selected,
+            selectedTileColor: theme.cardColor,
+            onTap: selected
+                ? null
+                : () {
+                    if (r == HomeRoute.config) {
+                      Navigator.popUntil(
+                        context,
+                        ModalRoute.withName(HomeRoute.config.routePath),
+                      );
+                    } else {
+                      Navigator.pushNamed(context, r.routePath);
+                    }
+                  });
+      },
+    ).toList();
     return Drawer(
       child: Container(
         constraints: BoxConstraints.expand(),

@@ -87,15 +87,13 @@ class AddLoanRouteState extends State<AddLoanRoute> {
       Box<Budget> budgetBox = Budget.getBox();
       budgetBox.add(loan);
     }
-    Navigator.popUntil(
-        context, ModalRoute.withName(HomeRoute.config.routePath));
+    Navigator.pop(context);
   }
 
   Future<void> _handleDelete() async {
     bool deleted = await loan.deleteWithConfirmation(context);
     if (deleted) {
-      Navigator.popUntil(
-          context, ModalRoute.withName(HomeRoute.config.routePath));
+      Navigator.pop(context);
     }
   }
 

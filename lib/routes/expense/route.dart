@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../config.dart';
 import 'add_expense.dart';
+import "expense.dart";
 
 class AddExpenseRoute extends StatefulWidget {
   static const RouteConfig config = RouteConfig(
@@ -26,4 +27,20 @@ class AddExpenseRoute extends StatefulWidget {
   AddExpenseRoute({this.expense});
 
   AddExpenseRouteState createState() => AddExpenseRouteState();
+}
+
+class ExpenseRoute extends StatefulWidget {
+  static const RouteConfig config = RouteConfig(
+    "/expense",
+    " Expenses",
+    Icons.money_off,
+  );
+
+  static Widget routeBuilder(BuildContext context) {
+    return ExpenseRoute();
+  }
+
+  ExpenseRoute();
+
+  ExpenseRouteState createState() => ExpenseRouteState();
 }

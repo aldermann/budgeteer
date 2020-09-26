@@ -1,7 +1,6 @@
 import 'package:budgeteer/components/budget/loan_item.dart';
 import 'package:budgeteer/components/dialog.dart';
 import 'package:budgeteer/models/models.dart';
-import 'package:budgeteer/routes/routes.dart';
 import 'package:flutter/material.dart';
 
 import '../config.dart';
@@ -57,16 +56,14 @@ class AddLoanPaymentRoute extends StatelessWidget {
           LoanPayment payment = loan.makePayment();
           Budget.getBox().add(payment);
           loan.linkPayment(payment);
-          Navigator.popUntil(
-              context, ModalRoute.withName(HomeRoute.config.routePath));
+          Navigator.pop(context);
         }
       };
 
   _handleDeletePayment(BuildContext context) => () async {
         bool deleted = await loanPayment.deleteWithConfirmation(context);
         if (deleted) {
-          Navigator.popUntil(
-              context, ModalRoute.withName(HomeRoute.config.routePath));
+          Navigator.pop(context);
         }
       };
 

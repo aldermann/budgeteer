@@ -67,6 +67,7 @@ class _CurrencyInputState extends State<CurrencyInput> {
         ? Icon(Icons.add, color: Colors.green)
         : Icon(Icons.remove, color: Colors.red);
     return ControlledTextField(
+      enabled: widget.enabled,
       value: valueString == "0" ? "" : valueString,
       decoration: widget.decoration.copyWith(icon: icon),
       keyboardType: TextInputType.number,

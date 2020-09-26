@@ -8,8 +8,10 @@ import 'loan_item.dart';
 import 'saving_item.dart';
 
 typedef void CallbackWithBudget<T extends Budget>(BuildContext context, T b);
-typedef PopupMenuButton PopupMenuBuilder<T extends Budget>(BuildContext context,
-    T b,);
+typedef PopupMenuButton PopupMenuBuilder<T extends Budget>(
+  BuildContext context,
+  T b,
+);
 
 class BudgetItem<T extends Budget> extends StatelessWidget {
   final T budget;
@@ -25,10 +27,14 @@ class BudgetItem<T extends Budget> extends StatelessWidget {
     this.editable: true,
   }) : super(key: key);
 
-  static BudgetItem buildItem({Key key, Budget budget, bool editable: true}) {
+  static Widget buildItem(
+      {Key key, Budget budget, bool editable: true, bool compoundLoan: false}) {
     if (budget is Income) {
       return IncomeItem(key: key, income: budget, editable: editable);
     } else if (budget is Loan) {
+      if (compoundLoan) {
+        return CompoundLoanItem(key: key, loan: budget, editable: editable);
+      }
       return LoanItem(key: key, loan: budget, editable: editable);
     } else if (budget is Expense) {
       return ExpenseItem(key: key, expense: budget, editable: editable);
@@ -40,8 +46,7 @@ class BudgetItem<T extends Budget> extends StatelessWidget {
     return BudgetItem(key: key, budget: budget, editable: editable);
   }
 
-  editBudget(BuildContext context) =>
-          () {
+  editBudget(BuildContext context) => () {
         if (onEdit != null) {
           onEdit(context, budget);
         }

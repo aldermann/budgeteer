@@ -19,7 +19,7 @@ class _SavingType extends BudgetType {
   static List<_SavingType> values = [In, Out];
 }
 
-class SavingRouteState extends State<AddSavingRoute> {
+class AddSavingRouteState extends State<AddSavingRoute> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   FocusNode _amountFieldFocusNode = FocusNode();
   FocusNode _nameFieldFocusNode = FocusNode();
@@ -91,13 +91,13 @@ class SavingRouteState extends State<AddSavingRoute> {
       Box<Budget> budgetBox = Budget.getBox();
       budgetBox.add(saving);
     }
-    Navigator.popUntil(context, ModalRoute.withName(HomeRoute.config.routePath));
+    Navigator.pop(context);
   }
 
   Future<void> _handleDelete() async {
     bool deleted = await saving.deleteWithConfirmation(context);
     if (deleted) {
-      Navigator.popUntil(context, ModalRoute.withName(HomeRoute.config.routePath));
+      Navigator.pop(context);
     }
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../config.dart';
 import 'add_loan.dart';
+import 'loan.dart';
 export 'add_loan_payment.dart';
 
 class AddLoanRoute extends StatefulWidget {
@@ -26,4 +27,21 @@ class AddLoanRoute extends StatefulWidget {
 
   @override
   AddLoanRouteState createState() => AddLoanRouteState();
+}
+
+class LoanRoute extends StatefulWidget {
+  static const RouteConfig config = RouteConfig(
+    "/loan",
+    "Loan",
+    Icons.assignment,
+  );
+
+  const LoanRoute({Key key}) : super(key: key);
+
+  static Widget routeBuilder(BuildContext context) {
+    return LoanRoute();
+  }
+
+  @override
+  LoanRouteState createState() => LoanRouteState();
 }

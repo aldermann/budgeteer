@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../config.dart';
 import 'add_saving.dart';
+import 'saving.dart';
 
 class AddSavingRoute extends StatefulWidget {
   static const RouteConfig config = RouteConfig(
@@ -28,9 +29,26 @@ class AddSavingRoute extends StatefulWidget {
     }
     if (args != null && !(args is Saving || args is Income)) {
       throw AssertionError(
-          "Argument for ${config.routePath} must be a SavingTransfer or Income object");
+          "Argument for ${config.routePath} must be a Saving or Income object");
     }
     return AddSavingRoute(saving: args);
+  }
+
+  @override
+  AddSavingRouteState createState() => AddSavingRouteState();
+}
+
+class SavingRoute extends StatefulWidget {
+  static const RouteConfig config = RouteConfig(
+    "/saving",
+    "Saving",
+    Icons.account_balance,
+  );
+
+  const SavingRoute({Key key}) : super(key: key);
+
+  static Widget routeBuilder(BuildContext context) {
+    return SavingRoute();
   }
 
   @override

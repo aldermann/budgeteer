@@ -6,6 +6,36 @@ import 'budget_item.dart';
 
 enum _LoanAction { Edit, Delete, MakePayment }
 
+class CompoundLoanItem extends StatelessWidget {
+  final Loan loan;
+  final bool editable;
+
+  const CompoundLoanItem({
+    Key key,
+    @required this.loan,
+    this.editable,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (loan.payment == null) {
+      return LoanItem(loan: loan, editable: editable);
+    }
+    return Column(
+      children: [
+        LoanItem(
+          loan: loan,
+          editable: editable,
+        ),
+        LoanPaymentItem(
+          loanPayment: loan.payment,
+          editable: editable,
+        ),
+      ],
+    );
+  }
+}
+
 class LoanItem extends BudgetItem<Loan> {
   LoanItem({
     Key key,
@@ -20,11 +50,13 @@ class LoanItem extends BudgetItem<Loan> {
         );
 
   static void _handleEdit(BuildContext context, Loan loan) {
-    Navigator.pushNamed(context, AddLoanRoute.config.routePath, arguments: loan);
+    Navigator.pushNamed(context, AddLoanRoute.config.routePath,
+        arguments: loan);
   }
 
   static void _handleMakePayment(BuildContext context, Loan loan) {
-    Navigator.pushNamed(context, AddLoanPaymentRoute.config.routePath, arguments: loan);
+    Navigator.pushNamed(context, AddLoanPaymentRoute.config.routePath,
+        arguments: loan);
   }
 
   static Future<void> _handleDelete(BuildContext context, Loan loan) async {

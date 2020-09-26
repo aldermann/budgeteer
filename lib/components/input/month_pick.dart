@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 
 class MonthPick extends StatelessWidget {
   final void Function(MonthYear newMonth) handleMonthSelected;
-
   final MonthYear currentMonth;
-
   final bool disabled;
+  final Color color;
 
-  MonthPick(
-      {Key key,
-      this.currentMonth,
-      this.handleMonthSelected,
-      this.disabled = false})
-      : super(key: key);
+  MonthPick({
+    Key key,
+    @required this.currentMonth,
+    @required this.handleMonthSelected,
+    this.disabled = false,
+    this.color,
+  }) : super(key: key);
 
   bool _isMinMonth() {
     Metadata meta = Metadata();
@@ -34,8 +34,10 @@ class MonthPick extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Material(
       elevation: 2,
+      color: color ?? theme.cardColor,
       borderRadius: BorderRadius.all(Radius.circular(15)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,

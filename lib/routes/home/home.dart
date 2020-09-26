@@ -4,7 +4,7 @@ import 'package:budgeteer/components/input/month_pick.dart';
 import 'package:budgeteer/models/models.dart';
 import 'package:flutter/material.dart';
 
-import 'components/budget_list.dart';
+import '../../components/budget/budget_list.dart';
 import 'components/speed_dial.dart';
 import 'route.dart';
 
@@ -50,7 +50,7 @@ class HomeRouteState extends State<HomeRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: CustomSpeedDial(),
-      drawer: DrawerWidget.defaultDrawer(HomeRoute.config.routePath),
+      drawer: RouteDrawer.defaultDrawer(HomeRoute.config.routePath),
       body: CustomScrollView(
         physics: ClampingScrollPhysics(),
         slivers: <Widget>[
@@ -68,16 +68,20 @@ class HomeRouteState extends State<HomeRoute> {
               centerTitle: true,
               title: FundListener(builder: fundBuilder),
               background: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    MonthPick(
-                      currentMonth: currentMonth,
-                      handleMonthSelected: setMonth,
-                    ),
-                  ]),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  MonthPick(
+                    currentMonth: currentMonth,
+                    handleMonthSelected: setMonth,
+                  ),
+                ],
+              ),
             ),
           ),
-          BudgetList(currentMonth: currentMonth),
+          BudgetList.sliver(
+            currentMonth: currentMonth,
+            compoundLoan: true,
+          ),
         ],
       ),
     );

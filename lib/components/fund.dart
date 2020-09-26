@@ -4,7 +4,10 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 typedef Widget FundBuilder(
-    BuildContext context, Currency totalBudget, Currency totalSaving);
+  BuildContext context,
+  Currency totalBudget,
+  Currency totalSaving,
+);
 
 class FundListener extends StatelessWidget {
   final FundBuilder builder;

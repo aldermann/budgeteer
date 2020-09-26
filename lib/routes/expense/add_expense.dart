@@ -69,13 +69,13 @@ class AddExpenseRouteState extends State<AddExpenseRoute> {
       default:
         break;
     }
-    Navigator.popUntil(context, ModalRoute.withName(HomeRoute.config.routePath));
+    Navigator.pop(context);
   }
 
   Future<void> _handleDelete() async {
     bool deleted = await expense.deleteWithConfirmation(context);
     if (deleted) {
-      Navigator.popUntil(context, ModalRoute.withName(HomeRoute.config.routePath));
+      Navigator.pop(context);
     }
   }
 
