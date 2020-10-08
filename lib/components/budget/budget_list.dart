@@ -11,20 +11,37 @@ typedef Widget BudgetListBuilder(BuildContext context, List<Budget> budgets);
 bool _defaultBudgetFilter(Budget _) => true;
 
 Widget _emptySliverBuilder(BuildContext context) {
+  ThemeData theme = Theme.of(context);
   return SliverList(
-    delegate: SliverChildListDelegate([Text("None")]),
+    delegate: SliverChildListDelegate([
+      Padding(
+        padding: const EdgeInsets.all(20),
+        child: Center(
+          child: Text(
+            "There's nothing here",
+            style: theme.textTheme.headline6,
+          ),
+        ),
+      ),
+    ]),
   );
 }
 
 Widget _emptyListBuilder(BuildContext context) {
-  return Text("None");
+  ThemeData theme = Theme.of(context);
+  return Center(
+    child: Text(
+      "Start logging budget to fill this up.",
+      style: theme.textTheme.headline6,
+    ),
+  );
 }
 
 BudgetListBuilder _sliverBudgetBuilder({bool compoundLoan: false}) =>
-    (BuildContext context, List<Budget> budgets) {
+        (BuildContext context, List<Budget> budgets) {
       return SliverList(
         delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
+              (BuildContext context, int index) {
             return Container(
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Card(
@@ -42,7 +59,7 @@ BudgetListBuilder _sliverBudgetBuilder({bool compoundLoan: false}) =>
     };
 
 BudgetListBuilder _listBudgetBuilder({bool compoundLoan: false}) =>
-    (BuildContext context, List<Budget> budgets) {
+        (BuildContext context, List<Budget> budgets) {
       return ListView.builder(
         itemBuilder: (BuildContext context, int index) {
           return Container(
@@ -82,13 +99,13 @@ class BudgetList extends StatelessWidget {
     BudgetFilterPredicate predicate,
     bool compoundLoan: false,
   }) : this._internal(
-          key: key,
-          currentMonth: currentMonth,
-          predicate: predicate ?? _defaultBudgetFilter,
-          emptyBuilder: _emptySliverBuilder,
-          budgetListBuilder: _sliverBudgetBuilder(compoundLoan: compoundLoan),
-          compoundLoan: compoundLoan,
-        );
+    key: key,
+    currentMonth: currentMonth,
+    predicate: predicate ?? _defaultBudgetFilter,
+    emptyBuilder: _emptySliverBuilder,
+    budgetListBuilder: _sliverBudgetBuilder(compoundLoan: compoundLoan),
+    compoundLoan: compoundLoan,
+  );
 
   BudgetList.listView({
     Key key,
@@ -96,13 +113,13 @@ class BudgetList extends StatelessWidget {
     BudgetFilterPredicate predicate,
     bool compoundLoan: false,
   }) : this._internal(
-          key: key,
-          currentMonth: currentMonth,
-          predicate: predicate ?? _defaultBudgetFilter,
-          emptyBuilder: _emptyListBuilder,
-          budgetListBuilder: _listBudgetBuilder(compoundLoan: compoundLoan),
-          compoundLoan: compoundLoan,
-        );
+    key: key,
+    currentMonth: currentMonth,
+    predicate: predicate ?? _defaultBudgetFilter,
+    emptyBuilder: _emptyListBuilder,
+    budgetListBuilder: _listBudgetBuilder(compoundLoan: compoundLoan),
+    compoundLoan: compoundLoan,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -111,9 +128,9 @@ class BudgetList extends StatelessWidget {
       builder: (BuildContext context, Box<Budget> box, Widget widget) {
         List<Budget> validBudgets = box.values
             .where((Budget b) {
-              return currentMonth.hasDateTime(b.time) &&
-                  !(compoundLoan && b is LoanPayment);
-            })
+          return currentMonth.hasDateTime(b.time) &&
+              !(compoundLoan && b is LoanPayment);
+        })
             .where(predicate)
             .toList()
             .reversed

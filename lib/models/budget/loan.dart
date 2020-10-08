@@ -6,7 +6,7 @@ import '../config.dart';
 import '../models.dart';
 import 'budget.dart';
 
-part "loan.g.dart";
+part "loan_adapter.dart";
 
 @HiveType(typeId: HiveTypeId.Loan)
 class Loan extends Budget {

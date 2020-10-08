@@ -45,7 +45,7 @@ abstract class Budget extends HiveObject {
     Hive.registerAdapter<ExpenseType>(ExpenseTypeAdapter());
     Hive.registerAdapter<Income>(IncomeAdapter());
     Hive.registerAdapter<IncomeType>(IncomeTypeAdapter());
-    Hive.registerAdapter<Saving>(SavingTransferAdapter());
+    Hive.registerAdapter<Saving>(SavingAdapter());
     Hive.registerAdapter<Loan>(LoanAdapter());
     Hive.registerAdapter<LoanPayment>(LoanPaymentAdapter());
   }

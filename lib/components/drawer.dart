@@ -22,6 +22,7 @@ class RouteDrawer extends StatelessWidget {
             ExpenseRoute.config,
             LoanRoute.config,
             SavingRoute.config,
+            WishListRoute.config,
           ],
           currentRoutePath: currentRoutePath,
         );

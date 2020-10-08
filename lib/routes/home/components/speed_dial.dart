@@ -5,13 +5,8 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hive/hive.dart';
 
 class CustomSpeedDial extends StatelessWidget {
-  final Box<Budget> box;
 
-  CustomSpeedDial() : box = Budget.getBox();
-
-  void handleClearFund() {
-    box.clear();
-  }
+  CustomSpeedDial();
 
   @override
   Widget build(BuildContext context) {
@@ -23,38 +18,35 @@ class CustomSpeedDial extends StatelessWidget {
       overlayColor: Colors.grey.shade900.withAlpha(50),
       children: [
         SpeedDialChild(
-          child: Icon(Icons.clear),
-          backgroundColor: Colors.grey,
-          label: 'Clear fund',
-          onTap: handleClearFund,
-          labelBackgroundColor: Colors.black,
-        ),
-        SpeedDialChild(
           child: Icon(AddIncomeRoute.config.icon),
           backgroundColor: Colors.green,
           label: AddIncomeRoute.config.routeName,
-          onTap: () => Navigator.pushNamed(context, AddIncomeRoute.config.routePath),
+          onTap: () =>
+              Navigator.pushNamed(context, AddIncomeRoute.config.routePath),
           labelBackgroundColor: Colors.black,
         ),
         SpeedDialChild(
           child: Icon(AddLoanRoute.config.icon),
           backgroundColor: Colors.yellow,
           label: AddLoanRoute.config.routeName,
-          onTap: () => Navigator.pushNamed(context, AddLoanRoute.config.routePath),
+          onTap: () =>
+              Navigator.pushNamed(context, AddLoanRoute.config.routePath),
           labelBackgroundColor: Colors.black,
         ),
         SpeedDialChild(
           child: Icon(AddExpenseRoute.config.icon),
           backgroundColor: Colors.red,
           label: AddExpenseRoute.config.routeName,
-          onTap: () => Navigator.pushNamed(context, AddExpenseRoute.config.routePath),
+          onTap: () =>
+              Navigator.pushNamed(context, AddExpenseRoute.config.routePath),
           labelBackgroundColor: Colors.black,
         ),
         SpeedDialChild(
           child: Icon(AddSavingRoute.config.icon),
           backgroundColor: Colors.blue,
           label: AddSavingRoute.config.routeName,
-          onTap: () => Navigator.pushNamed(context, AddSavingRoute.config.routePath),
+          onTap: () =>
+              Navigator.pushNamed(context, AddSavingRoute.config.routePath),
           labelBackgroundColor: Colors.black,
         ),
       ],

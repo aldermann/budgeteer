@@ -41,7 +41,9 @@ class Currency {
     }
     return currencyFormat.format(value);
   }
-
+  double toDouble() {
+    return value.toDouble();
+  }
   String toString() {
     return value.toString();
   }

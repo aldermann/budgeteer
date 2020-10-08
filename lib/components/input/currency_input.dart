@@ -63,20 +63,30 @@ class _CurrencyInputState extends State<CurrencyInput> {
   @override
   Widget build(BuildContext context) {
     final String valueString = widget.value?.positive.toString();
+    ThemeData themeData = Theme.of(context);
     Icon icon = widget.sign == CurrencyInputSign.Positive
         ? Icon(Icons.add, color: Colors.green)
         : Icon(Icons.remove, color: Colors.red);
-    return ControlledTextField(
-      enabled: widget.enabled,
-      value: valueString == "0" ? "" : valueString,
-      decoration: widget.decoration.copyWith(icon: icon),
-      keyboardType: TextInputType.number,
-      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-      onChanged: (String input) =>
-          this.widget.onChanged(_convertToCurrency(input, widget.sign)),
-      onSubmitted: (String input) => this.widget.onSubmitted?.call(
-            _convertToCurrency(input, widget.sign),
-          ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        ControlledTextField(
+          enabled: widget.enabled,
+          value: valueString == "0" ? "" : valueString,
+          decoration: widget.decoration.copyWith(icon: icon),
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          onChanged: (String input) =>
+              this.widget.onChanged(_convertToCurrency(input, widget.sign)),
+          onSubmitted: (String input) => this.widget.onSubmitted?.call(
+                _convertToCurrency(input, widget.sign),
+              ),
+        ),
+        Text(
+          widget.value.representation(extended: true),
+          style: themeData.textTheme.subtitle1,
+        ),
+      ],
     );
   }
 }

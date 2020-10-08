@@ -9,8 +9,10 @@ Future<void> main() async {
   Budget.register();
   Currency.register();
   HiveLink.register();
+  WishList.register();
   await Metadata.init();
   await Budget.openBox();
+  await WishList.openBox();
   runApp(MyApp());
 }
 

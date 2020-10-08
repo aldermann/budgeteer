@@ -1,37 +1,43 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'saving.dart';
+part of 'wish_item.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class SavingAdapter extends TypeAdapter<Saving> {
+class WishItemAdapter extends TypeAdapter<WishItem> {
   @override
-  final int typeId = 5;
+  final int typeId = 9;
 
   @override
-  Saving read(BinaryReader reader) {
+  WishItem read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Saving()
-      ..name = fields[0] as String
-      ..amount = fields[1] as Currency
-      ..time = fields[2] as DateTime;
+    return WishItem(
+      name: fields[0] as String,
+      price: fields[3] as Currency,
+      considerationEnd: fields[4] as DateTime,
+      type: fields[5] as ExpenseType,
+    )..description = fields[1] as String;
   }
 
   @override
-  void write(BinaryWriter writer, Saving obj) {
+  void write(BinaryWriter writer, WishItem obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
-      ..write(obj.amount)
-      ..writeByte(2)
-      ..write(obj.time);
+      ..write(obj.description)
+      ..writeByte(3)
+      ..write(obj.price)
+      ..writeByte(4)
+      ..write(obj.considerationEnd)
+      ..writeByte(5)
+      ..write(obj.type);
   }
 
   @override
@@ -40,7 +46,7 @@ class SavingAdapter extends TypeAdapter<Saving> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SavingAdapter &&
+      other is WishItemAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
