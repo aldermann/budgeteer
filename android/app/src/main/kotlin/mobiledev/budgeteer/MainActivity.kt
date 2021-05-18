@@ -1,4 +1,4 @@
-package com.example.budgeteer
+package mobiledev.budgeteer
 
 import io.flutter.embedding.android.FlutterActivity
 
